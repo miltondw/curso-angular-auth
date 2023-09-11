@@ -35,6 +35,7 @@ export class TokenService {
 
   isValidToken() {
     const token = this.getToken();
+    console.log(token,'token')
     if (!token) {
       return false;
     }
@@ -43,6 +44,7 @@ export class TokenService {
       const tokenDate = new Date(0);
       tokenDate.setUTCSeconds(decodeToken.exp);
       const today = new Date();
+      console.log(tokenDate.getTime(), today.getTime());
       return tokenDate.getTime() > today.getTime();
     }
     return false;
@@ -50,6 +52,7 @@ export class TokenService {
 
   isValidRefreshToken() {
     const token = this.getRefreshToken();
+    console.log(token,'token')
     if (!token) {
       return false;
     }
