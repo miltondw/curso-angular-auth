@@ -9,6 +9,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component';
 
 import { BoardsService } from '@services/boards.service';
+import { CardsService } from '@services/cards.service';
 import { Card } from '@models/card.model';
 import { Board } from '@models/board.model';
 
@@ -31,7 +32,8 @@ export class BoardComponent implements OnInit {
    constructor(
     private dialog: Dialog,
     private route: ActivatedRoute,
-    private boardsService: BoardsService
+    private boardsService: BoardsService,
+    private cardsService: CardsService,
   ) {}
 
   ngOnInit() {
@@ -58,9 +60,11 @@ export class BoardComponent implements OnInit {
         event.currentIndex
       );
     }
-   const rta= this.boardsService.getPosition(event.container.data, event.currentIndex)
-   console.log(rta)
-  }
+    const position = this.boardsService.getPosition(event.container.data, event.currentIndex);
+    const card = event.container.data[event.currentIndex];
+    const listId=event.container.id
+    this.updateCard(card, position,listId);
+    }
 
   addColumn() {
 
@@ -83,6 +87,12 @@ export class BoardComponent implements OnInit {
     this.boardsService.getBoard(id)
     .subscribe(board => {
       this.board = board;
+    })
+  }
+    private updateCard(card: Card, position: number,listId:number | string) {
+    this.cardsService.update(card.id, { position,listId })
+    .subscribe((cardUpdated) => {
+      console.log(cardUpdated);
     })
   }
 }
