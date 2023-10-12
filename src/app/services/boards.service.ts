@@ -8,7 +8,7 @@ import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
 import { Colors } from '@models/colors.model';
 import { List } from '@models/list.model';
-
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,6 +19,8 @@ export class BoardsService {
 
   constructor(private http: HttpClient) {}
   bufferSpace = 65535;
+  backgroundColor$ = new BehaviorSubject<Colors>('sky');
+
   getBoard(id: Board['id']) {
     return this.http.get<Board>(`${this.apiUrl}/api/v1/boards/${id}`, {
       context: checkToken(),
@@ -65,5 +67,7 @@ export class BoardsService {
     const onBottomPosition = elements[lastIndex].position;
     return onBottomPosition + this.bufferSpace;
   }
-
+ setBackgroundColor(color: Colors) {
+    this.backgroundColor$.next(color);
+  }
 }

@@ -62,6 +62,10 @@ export class BoardComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(): void {
+    this.boardsService.setBackgroundColor('sky');
+  }
+
   drop(event: CdkDragDrop<Card[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(
@@ -119,6 +123,7 @@ export class BoardComponent implements OnInit {
     this.boardsService.getBoard(id)
     .subscribe(board => {
       this.board = board;
+       this.boardsService.setBackgroundColor(this.board.backgroundColor);
     })
   }
     private updateCard(card: Card, position: number,listId:number | string) {
